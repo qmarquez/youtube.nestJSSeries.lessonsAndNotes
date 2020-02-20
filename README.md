@@ -11,3 +11,16 @@ It's a server apps framework oriented to scalability and efficiency. Developed o
 Nest gives a scaffolding for a backend project based on Angular modular pattern.
 
 ![alt text](./nest.jpg "NestJS.")
+
+# Section 2 - Hello world.
+
+#### Nest scafold.
+
+| file or folder            |                                              |
+| ------------------------- | -------------------------------------------- |
+| **./dist**                | Transpiled files of our project.             |
+| **./src**                 | All our code.                                |
+| **./test**                | e2e tests for our app and config for it.     |
+| **./.prettierrc**         | Base config of prettier recommended by Nest. |
+| **./nest-cli.json**       | Nest CLI config file.                        |
+| **./tsconfig.build.json** | options for TypeScript transpilation.        |
