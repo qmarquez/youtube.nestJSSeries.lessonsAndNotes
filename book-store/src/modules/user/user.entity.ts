@@ -1,4 +1,6 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
+import { UserDetails } from './userDetails.entity';
+import { Role } from '../role/role.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -14,6 +16,14 @@ export class User extends BaseEntity {
 
   @Column({ type: 'varchar', nullable: false })
   password: string;
+
+  @OneToOne(type => UserDetails, { cascade: true, nullable: false, eager: true })
+  @JoinColumn({ name: 'detail_id' })
+  details: UserDetails;
+
+  @ManyToMany(type => Role, ({ users }) => users)
+  @JoinTable()
+  roles: Role[];
 
   @Column({ type: 'varchar', default: 'ACTIVE', length: '8' })
   status: string;
