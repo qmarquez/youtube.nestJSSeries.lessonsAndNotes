@@ -20,6 +20,5 @@ export class AppModule {
     private readonly _configService: ConfigService
   ){
     AppModule.port = this._configService.get(configuration.PORT)
-
   }
 }
