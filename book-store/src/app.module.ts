@@ -7,9 +7,16 @@ import { configuration } from './config/config.keys';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './modules/user/user.module';
 import { RoleModule } from './modules/role/role.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
-  imports: [ConfigModule, DatabaseModule, UserModule, RoleModule],
+  imports: [
+    ConfigModule,
+    DatabaseModule,
+    SharedModule,
+    UserModule,
+    RoleModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
@@ -18,7 +25,7 @@ export class AppModule {
 
   constructor(
     private readonly _configService: ConfigService
-  ){
+  ) {
     AppModule.port = this._configService.get(configuration.PORT)
   }
 }
