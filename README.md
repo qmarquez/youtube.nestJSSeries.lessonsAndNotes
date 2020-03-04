@@ -24,3 +24,9 @@ Nest gives a scaffolding for a backend project based on Angular modular pattern.
 | **./.prettierrc**         | Base config of prettier recommended by Nest. |
 | **./nest-cli.json**       | Nest CLI config file.                        |
 | **./tsconfig.build.json** | options for TypeScript transpilation.        |
+
+
+#### Case types:
+Camel case: `thisIsACamelCasedString`\
+Pascal case: `ThisIsAPascalCasedString`\
+Snake case: `finaly_this_is_snake_cased_string`

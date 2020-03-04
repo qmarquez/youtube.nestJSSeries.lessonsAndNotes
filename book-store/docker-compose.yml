@@ -2,9 +2,6 @@ version: "3"
 
 services:
   postgres:
-    command: "tail -f /dev/null"
     image: postgres
     ports: 
       - 5432:5432
-    environment: 
-      - POSTRGES_PASSWORD=postgres
