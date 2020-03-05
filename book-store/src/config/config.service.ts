@@ -19,7 +19,12 @@ export class ConfigService {
       this.envConfig = parse(fs.readFileSync(envPath));
     } else {
       this.envConfig = {
-        PORT: env.PORT
+        PORT: env.PORT,
+        USERNAME: env.USERNAME,
+        PASSWORD: env.PASSWORD,
+        DATABASE: env.DATABASE,
+        HOST: env.HOST,
+        SSL: env.SSL
       }
     }
   }

@@ -8,9 +8,8 @@ export const databaseProviders = [
   TypeOrmModule.forRootAsync({
     imports: [ConfigModule],
     inject: [ConfigService],
-    useFactory: async (config: ConfigService) => (
-      {
-        // ssl: true,
+    useFactory: async (config: ConfigService) => ({
+        ssl: config.get(configuration.SSL) === 'true',
         type: "postgres",
         database: config.get(configuration.DATABASE),
         host: config.get(configuration.HOST), 
@@ -18,7 +17,6 @@ export const databaseProviders = [
         password: config.get(configuration.PASSWORD),
         entities: [__dirname + "/../**/*.entity{.ts,.js}"],
         migrations: [__dirname + "/migrations/*{.ts,.js}"],
-      } as ConnectionOptions
-    )
+      } as ConnectionOptions)
   })
 ]
