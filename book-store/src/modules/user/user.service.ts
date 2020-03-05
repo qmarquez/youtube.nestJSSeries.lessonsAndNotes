@@ -1,8 +1,6 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MapperService } from '../../shared/mapper.service';
-import { UserDTO } from './user.dto';
 import { User } from './user.entity';
 import { UserDetails } from './userDetails.entity';
 import { getConnection } from 'typeorm';
@@ -11,12 +9,11 @@ import { Role } from '../role/role.entity';
 @Injectable()
 export class UserService {
   constructor(
-    private readonly mapperService: MapperService,
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
   ) { }
 
-  async get(id): Promise<UserDTO> {
+  async get(id): Promise<User> {
     if (!id) {
       throw new BadRequestException('id must be sent');
     }
@@ -27,16 +24,16 @@ export class UserService {
       throw new NotFoundException();
     }
 
-    return this.mapperService.map<User, UserDTO>(user, new UserDTO);
+    return user;
   }
 
-  async getAll(): Promise<UserDTO[]> {
+  async getAll(): Promise<User[]> {
     const users = await this.userRepository.find({ where: { status: 'ACTIVE' } });
 
-    return this.mapperService.mapCollection<User, UserDTO>(users, new UserDTO);
+    return users;
   }
 
-  async create(user: User): Promise<UserDTO> {
+  async create(user: User): Promise<User> {
     const details = new UserDetails;
     user.details = details;
 
@@ -46,7 +43,7 @@ export class UserService {
 
     const savedUser = await this.userRepository.save(user);
 
-    return this.mapperService.map<User, UserDTO>(savedUser, new UserDTO());
+    return savedUser;
   }
 
   async update(id: number, user: User): Promise<void> {
