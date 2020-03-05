@@ -8,6 +8,8 @@ import { DatabaseModule } from './database/database.module';
 import { UserModule } from './modules/user/user.module';
 import { RoleModule } from './modules/role/role.module';
 import { SharedModule } from './shared/shared.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { AuthService } from './modules/auth/auth.service';
 
 @Module({
   imports: [
@@ -15,10 +17,11 @@ import { SharedModule } from './shared/shared.module';
     DatabaseModule,
     SharedModule,
     UserModule,
-    RoleModule
+    RoleModule,
+    AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthService],
 })
 export class AppModule {
   static port: number | string;
