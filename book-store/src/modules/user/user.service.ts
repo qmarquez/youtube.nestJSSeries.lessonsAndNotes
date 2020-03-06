@@ -32,20 +32,7 @@ export class UserService {
 
     return users;
   }
-
-  async create(user: User): Promise<User> {
-    const details = new UserDetails;
-    user.details = details;
-
-    const repo = await getConnection().getRepository(Role);
-    const defaultRole = await repo.findOne({ where: { name: "GENERAL" } });
-    user.roles = [defaultRole];
-
-    const savedUser = await this.userRepository.save(user);
-
-    return savedUser;
-  }
-
+  
   async update(id: number, user: User): Promise<void> {
     await this.userRepository.update(id, user);
   }
