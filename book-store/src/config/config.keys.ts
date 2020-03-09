@@ -4,5 +4,6 @@ export enum configuration {
   USERNAME = 'USERNAME',
   PASSWORD = 'PASSWORD',
   DATABASE = 'DATABASE',
-  SSL = 'SSL'
+  SSL = 'SSL',
+  JWT_SECRET = 'JWT_SECRET'
 }

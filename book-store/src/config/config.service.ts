@@ -24,6 +24,7 @@ export class ConfigService {
         PASSWORD: env.PASSWORD,
         DATABASE: env.DATABASE,
         HOST: env.HOST,
+        JWT_SECRET: env.JWT_SECRET,
         SSL: env.SSL
       }
     }
