@@ -20,12 +20,6 @@ export class UserController {
     return users
   }
 
-  @Post()
-  async createUser(@Body() user: User) {
-    const createdUser = await this.userService.create(user);
-    return createdUser;
-  }
-
   @Patch(':id')
   async updateUser(@Param('id', ParseIntPipe) id: number, @Body() user: User) {
     const createdUser = await this.userService.update(id, user);

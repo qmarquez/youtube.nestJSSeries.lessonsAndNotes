@@ -2,9 +2,6 @@ import { Injectable, BadRequestException, NotFoundException } from '@nestjs/comm
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { UserDetails } from './userDetails.entity';
-import { getConnection } from 'typeorm';
-import { Role } from '../role/role.entity';
 
 @Injectable()
 export class UserService {
@@ -32,7 +29,7 @@ export class UserService {
 
     return users;
   }
-  
+
   async update(id: number, user: User): Promise<void> {
     await this.userRepository.update(id, user);
   }

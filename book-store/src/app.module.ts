@@ -9,7 +9,6 @@ import { UserModule } from './modules/user/user.module';
 import { RoleModule } from './modules/role/role.module';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { AuthService } from './modules/auth/auth.service';
 
 @Module({
   imports: [
@@ -21,7 +20,7 @@ import { AuthService } from './modules/auth/auth.service';
     AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService, AuthService],
+  providers: [AppService],
 })
 export class AppModule {
   static port: number | string;
