@@ -5,8 +5,9 @@ import { configuration } from '../../../config/config.keys';
 import { AuthRepository } from '../auth.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IJwtPayload } from '../jwt-payload.interface';
-import { UnauthorizedException } from '@nestjs/common';
+import { UnauthorizedException, Injectable } from '@nestjs/common';
 
+@Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
 
   constructor(
