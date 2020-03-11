@@ -2,6 +2,8 @@ import { Controller, Get, Param, Post, Body, Patch, Delete, ParseIntPipe, UseGua
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../role/decorators/role.decorator';
+import { RoleGuard } from '../role/guards/role.guard';
 
 @Controller('users')
 export class UserController {
@@ -10,6 +12,8 @@ export class UserController {
   ) { }
 
   @Get(':id')
+  @Roles('ADMIN', 'AUTHOR')
+  @UseGuards(AuthGuard(), RoleGuard)
   async getUser(@Param('id', ParseIntPipe) id: number) {
     const user = await this.userService.get(id);
     return user;
