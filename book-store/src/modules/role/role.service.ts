@@ -2,6 +2,7 @@ import { Injectable, BadRequestException, NotFoundException } from '@nestjs/comm
 import { RoleRepository } from './role.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './role.entity';
+import { status } from '../../shared/status.enum';
 
 @Injectable()
 export class RoleService {
@@ -14,7 +15,7 @@ export class RoleService {
       throw new BadRequestException('id must be sent');
     }
 
-    const role = await this.roleRepository.findOne(id, { where: { status: 'ACTIVE' } });
+    const role = await this.roleRepository.findOne(id, { where: { status: status.ACTIVE } });
 
     if (!role) {
       throw new NotFoundException();
@@ -24,7 +25,7 @@ export class RoleService {
   }
 
   async getAll(): Promise<Role[]> {
-    const roles = await this.roleRepository.find({ where: { status: 'ACTIVE' } });
+    const roles = await this.roleRepository.find({ where: { status: status.ACTIVE } });
 
     return roles;
   }
@@ -44,13 +45,13 @@ export class RoleService {
       throw new BadRequestException('id must be sent');
     }
 
-    const role = await this.roleRepository.findOne(id, { where: { status: 'ACTIVE' } });
+    const role = await this.roleRepository.findOne(id, { where: { status: status.ACTIVE } });
 
     if (!role) {
       throw new NotFoundException();
     }
 
-    role.status = 'INACTIVE';
+    role.status = status.INACTIVE;
 
     role.save();
   }

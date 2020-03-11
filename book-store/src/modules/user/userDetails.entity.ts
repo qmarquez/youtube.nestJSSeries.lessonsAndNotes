@@ -1,4 +1,5 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { status } from '../../shared/status.enum';
 
 @Entity('users_details')
 export class UserDetails extends BaseEntity {
@@ -12,7 +13,7 @@ export class UserDetails extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   lastname: string;
 
-  @Column({ type: 'varchar', default: 'ACTIVE', length: '8' })
+  @Column({ type: 'varchar', default: status.ACTIVE, length: '8' })
   status: string;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })

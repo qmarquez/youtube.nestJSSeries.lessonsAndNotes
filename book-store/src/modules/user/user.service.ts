@@ -2,12 +2,16 @@ import { Injectable, BadRequestException, NotFoundException } from '@nestjs/comm
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
+import { RoleRepository } from '../role/role.repository';
+import { status } from '../../shared/status.enum';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
+    @InjectRepository(RoleRepository)
+    private readonly roleRepository: RoleRepository,
   ) { }
 
   async get(id): Promise<User> {
@@ -15,7 +19,7 @@ export class UserService {
       throw new BadRequestException('id must be sent');
     }
 
-    const user = await this.userRepository.findOne(id, { where: { status: 'ACTIVE' } });
+    const user = await this.userRepository.findOne(id, { where: { status: status.ACTIVE } });
 
     if (!user) {
       throw new NotFoundException();
@@ -25,7 +29,7 @@ export class UserService {
   }
 
   async getAll(): Promise<User[]> {
-    const users = await this.userRepository.find({ where: { status: 'ACTIVE' } });
+    const users = await this.userRepository.find({ where: { status: status.ACTIVE } });
 
     return users;
   }
@@ -35,18 +39,26 @@ export class UserService {
   }
 
   async delete(id: number): Promise<void> {
-    if (!id) {
-      throw new BadRequestException('id must be sent');
-    }
-
-    const user = await this.userRepository.findOne(id, { where: { status: 'ACTIVE' } });
-
-    if (!user) {
-      throw new NotFoundException();
-    }
-
-    user.status = 'INACTIVE';
+    const user = await this.get(id);
+    user.status = status.INACTIVE;
 
     user.save();
+  }
+
+  async setRoleToUser(userId: number, roleId: number) {
+    const user = await this.get(userId);
+
+    const role = await this.roleRepository.findOne(roleId, {
+      where: { status: status.ACTIVE }
+    });
+
+    if (!role) {
+      throw new NotFoundException('Role not exists.');
+    }
+
+    user.roles.push(role)
+    await user.save();
+
+    return true;
   }
 }
