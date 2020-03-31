@@ -2,6 +2,7 @@ import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColum
 import { UserDetails } from './userDetails.entity';
 import { Role } from '../role/role.entity';
 import { status } from '../../shared/status.enum';
+import { Book } from '../book/book.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -25,6 +26,10 @@ export class User extends BaseEntity {
   @ManyToMany(type => Role, ({ users }) => users, { eager: true })
   @JoinTable()
   roles: Role[];
+
+  @ManyToMany(type => Book, ({ id }) => id)
+  @JoinTable()
+  books: Book[];
 
   @Column({ type: 'varchar', default: status.ACTIVE, length: '8' })
   status: string;

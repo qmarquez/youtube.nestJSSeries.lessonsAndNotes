@@ -1,0 +1,37 @@
+#!/bin/sh
+
+
+CREATE_ENTITY=
+CREATE_REPOSITORY=
+VALUE=
+while getopts 'erv:' flag; do
+  case "${flag}" in
+    e)  CREATE_ENTITY=1 ;;
+    r)  CREATE_REPOSITORY=1 ;;
+    v)  VALUE="${OPTARG}" ;;
+    *)  echo Bad flag used
+        exit 1 ;;
+  esac
+done
+MODULE_FOLDER=./src/modules/$VALUE
+TEST_FOLDER=$MODULE_FOLDER/tests
+DTOS_FOLDER=$MODULE_FOLDER/dto
+
+# Create module, controller and service
+./docker/nest_module modules/$VALUE
+./docker/nest_controller modules/$VALUE
+./docker/nest_service modules/$VALUE
+
+# Create entity and repository
+if [ ! -z "$CREATE_ENTITY" ]; then
+  > $MODULE_FOLDER/$VALUE.entity.ts
+fi
+
+if [ ! -z "$CREATE_REPOSITORY" ]; then
+  > $MODULE_FOLDER/$VALUE.repository.ts
+fi
+
+# Create directories for tests and dtos
+mkdir $TEST_FOLDER
+mkdir $DTOS_FOLDER
+# mv $MODULE_FOLDER/*.spec.ts $TEST_FOLDER

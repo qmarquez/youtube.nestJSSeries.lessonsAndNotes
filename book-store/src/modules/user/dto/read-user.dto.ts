@@ -1,4 +1,4 @@
-import { IsNumber, IsEmail } from "class-validator";
+import { IsNumber, IsEmail, IsString } from "class-validator";
 import { ReadUserDetailsDTO } from "./read-user-details.dto";
 import { Type, Exclude, Expose } from "class-transformer";
 import { ReadRoleDTO } from "../../role/dto";
@@ -14,7 +14,7 @@ export class ReadUserDTO {
   readonly email: string;
 
   @Expose()
-  @IsEmail()
+  @IsString()
   readonly username: string;
 
   @Expose()

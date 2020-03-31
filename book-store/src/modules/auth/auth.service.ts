@@ -2,10 +2,11 @@ import { Injectable, ConflictException, NotFoundException, UnauthorizedException
 import { AuthRepository } from './auth.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { SignupDTO, SigninDTO } from './dto';
+import { SignupDTO, SigninDTO, LoggedInDTO } from './dto';
 import { compare } from 'bcryptjs';
 import { IJwtPayload } from './jwt-payload.interface';
 import { RoleType } from '../role/roleType.enum';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class AuthService {
@@ -24,14 +25,18 @@ export class AuthService {
     return this.authRepository.signup(signup);
   }
 
-  async signin(signin: SigninDTO): Promise<{ token: string }> {
+  async signin(signin: SigninDTO): Promise<LoggedInDTO> {
     const { username, password } = signin;
 
     const user = await this.authRepository.findOne({ where: { username } });
-    if (!user) { throw new NotFoundException('username does not exists.'); }
+    if (!user) {
+      throw new NotFoundException('username does not exists.');
+    }
 
     const isMatch = await compare(password, user.password);
-    if (!isMatch) { throw new UnauthorizedException('invalid credentials'); }
+    if (!isMatch) {
+      throw new UnauthorizedException('invalid credentials');
+    }
 
     const { id, email } = user;
 
@@ -44,6 +49,6 @@ export class AuthService {
 
     const token = this.jwtService.sign(payload);
 
-    return { token };
+    return plainToClass(LoggedInDTO, { token, user });
   }
 }

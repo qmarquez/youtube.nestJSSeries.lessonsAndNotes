@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker-compose exec --user 1000 book_store npx nest generate service $@

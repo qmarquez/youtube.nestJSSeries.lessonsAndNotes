@@ -11,13 +11,13 @@ export class AuthController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  async signup(@Body() signup: SignupDTO) {
+  signup(@Body() signup: SignupDTO) {
     return this.authService.signup(signup);
   }
 
   @Post()
   @UsePipes(ValidationPipe)
-  async signin(@Body() signin: SigninDTO) {
+  signin(@Body() signin: SigninDTO) {
     return this.authService.signin(signin);
   }
 }
