@@ -4,6 +4,7 @@ import { User } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../role/decorators/role.decorator';
 import { RoleGuard } from '../role/guards/role.guard';
+import { RoleType } from '../role/roleType.enum';
 
 @Controller('users')
 export class UserController {
@@ -12,14 +13,14 @@ export class UserController {
   ) { }
 
   @Get(':id')
-  @Roles('ADMIN', 'AUTHOR')
-  @UseGuards(AuthGuard(), RoleGuard)
+  // @Roles(RoleType.ADMINISTRATOR, RoleType.AUTHOR)
+  // @UseGuards(AuthGuard(), RoleGuard)
   async getUser(@Param('id', ParseIntPipe) id: number) {
     const user = await this.userService.get(id);
     return user;
   }
 
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), RoleGuard)
   @Get()
   async getUsers() {
     const users = await this.userService.getAll();
