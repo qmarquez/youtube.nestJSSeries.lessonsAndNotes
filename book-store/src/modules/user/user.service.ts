@@ -1,9 +1,10 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
 import { RoleRepository } from '../role/role.repository';
 import { status } from '../../shared/status.enum';
+import { ReadUserDTO, UpdateUserDTO } from './dto';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -14,7 +15,7 @@ export class UserService {
     private readonly roleRepository: RoleRepository,
   ) { }
 
-  async get(id): Promise<User> {
+  async get(id): Promise<ReadUserDTO> {
     if (!id) {
       throw new BadRequestException('id must be sent');
     }
@@ -25,28 +26,47 @@ export class UserService {
       throw new NotFoundException();
     }
 
-    return user;
+    return plainToClass(ReadUserDTO, user);
   }
 
-  async getAll(): Promise<User[]> {
+  async getAll(): Promise<ReadUserDTO[]> {
     const users = await this.userRepository.find({ where: { status: status.ACTIVE } });
 
-    return users;
+    return users.map(user => plainToClass(ReadUserDTO, user));
   }
 
-  async update(id: number, user: User): Promise<void> {
-    await this.userRepository.update(id, user);
+  async update(id: number, user: Partial<UpdateUserDTO>): Promise<ReadUserDTO> {
+    const foundUser = await this.userRepository.findOne(id, { where: { status: status.ACTIVE } });
+
+    if (!foundUser) {
+      throw new NotFoundException('User not exists.');
+    }
+
+    foundUser.username = user.username;
+
+    const updatedUser = foundUser.save();
+
+    return plainToClass(ReadUserDTO, updatedUser);
   }
 
   async delete(id: number): Promise<void> {
-    const user = await this.get(id);
+    const user = await this.userRepository.findOne(id, { where: { status: status.ACTIVE } });
+
+    if (!user) {
+      throw new NotFoundException('User not exists.');
+    }
+
     user.status = status.INACTIVE;
 
     user.save();
   }
 
-  async setRoleToUser(userId: number, roleId: number) {
-    const user = await this.get(userId);
+  async setRoleToUser(userId: number, roleId: number): Promise<boolean> {
+    const user = await this.userRepository.findOne(userId, { where: { status: status.ACTIVE } });
+
+    if (!user) {
+      throw new NotFoundException('User not exists.');
+    }
 
     const role = await this.roleRepository.findOne(roleId, {
       where: { status: status.ACTIVE }
